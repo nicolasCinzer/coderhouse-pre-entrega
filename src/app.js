@@ -7,6 +7,7 @@ import MongoStore from 'connect-mongo'
 import session from 'express-session'
 
 // Internal Dependencies
+import DB_URL from './dao/dbUrl.js'
 import './dao/configDB.js'
 import Routes from './routes/router.js'
 import errorHandler from './middleware/errorHandler.middleware.js'
@@ -26,7 +27,7 @@ app.set('views', process.cwd() + '/src/views')
 app.use(
   session({
     store: new MongoStore({
-      mongoUrl: `mongodb+srv://nicolascinzer00:niJ80qDPNmaUlyLS@ecommerce.syps22c.mongodb.net/eCommerce?retryWrites=true&w=majority`
+      mongoUrl: DB_URL
     }),
     secret: 'cacioypepe',
     cookie: { maxAge: 60000 }

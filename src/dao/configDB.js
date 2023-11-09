@@ -1,7 +1,6 @@
 import { connect } from 'mongoose'
+import DB_URL from './dbUrl.js'
 
-const URI = `mongodb+srv://nicolascinzer00:niJ80qDPNmaUlyLS@ecommerce.syps22c.mongodb.net/eCommerce?retryWrites=true&w=majority`
-
-connect(URI)
+connect(DB_URL)
   .then(console.log('DB Connected!'))
   .catch(err => console.log(err))
