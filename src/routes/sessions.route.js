@@ -1,45 +1,35 @@
 import { Router } from 'express'
-import { userService } from '../dao/services/index.services.js'
-import { success } from '../utils/index.js'
-import { AuthError, ValidationError } from '../errors/errors.js'
+import passport from 'passport'
+import { signup, signout, login, profile, resetPassword } from '../controllers/sessions.controller.js'
 
 export const router = Router()
 
-router.post('/sessions/signup', async (req, res, next) => {
-  try {
-    await userService.create(req.body)
+// router.post('/sessions/signup', signup)
+router.post(
+  '/sessions/signup',
+  passport.authenticate('signup', {
+    successRedirect: '/profile',
+    failureRedirect: '/error'
+  })
+)
 
-    res.redirect('/login')
-  } catch (err) {
-    next(err)
-  }
+router.post('/sessions/signout', signout)
+
+// router.post('/sessions/login', login)
+router.post(
+  '/sessions/login',
+  passport.authenticate('login', {
+    successRedirect: '/profile',
+    failureRedirect: '/error'
+  })
+)
+
+router.get('/sessions/auth/github', passport.authenticate('github', { scope: ['user:email'] }))
+
+router.get('/sessions/callback', passport.authenticate('github'), (req, res) => {
+  res.send('testing')
 })
 
-router.post('/sessions/login', async (req, res, next) => {
-  const { email, password } = req.body
+router.get('/sessions/profile', profile)
 
-  try {
-    if (!email || !password) {
-      throw new ValidationError('Some data is missing!')
-    }
-
-    const user = await userService.findByEmail(req.body.email)
-
-    if (!user) res.redirect('/signup')
-
-    if (password !== user.password) {
-      throw new AuthError('Password is not valid.')
-    }
-
-    req.session.user = {
-      email,
-      first_name: user.first_name
-    }
-
-    res.redirect('/home')
-  } catch (err) {
-    next(err)
-  }
-})
-
-router.get('/sessions/profile')
+router.post('/sessions/resetPassword', resetPassword)
