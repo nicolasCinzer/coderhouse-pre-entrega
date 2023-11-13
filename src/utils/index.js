@@ -1,3 +1,6 @@
-import success from './responseStructure.js'
+import success from './successResponse.js'
+import hashUtil from './hashData.js'
 
-export { success }
+const { compareData, hashData } = hashUtil
+
+export { success, hashData, compareData }

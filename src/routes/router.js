@@ -6,11 +6,12 @@ import { router as sessionsRouter } from './sessions.route.js'
 
 const router = Router()
 
-const root = '/api'
+const root = '/'
+const api = '/api'
 
-router.use(root, cartsRouter)
-router.use(root, productsRouter)
-router.use('/', viewsRouter)
-router.use(root, sessionsRouter)
+router.use(api, cartsRouter)
+router.use(api, productsRouter)
+router.use(root, viewsRouter)
+router.use(api, sessionsRouter)
 
 export default router
