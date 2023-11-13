@@ -5,6 +5,7 @@ import { Server } from 'socket.io'
 import cookieParser from 'cookie-parser'
 import MongoStore from 'connect-mongo'
 import session from 'express-session'
+import passport from 'passport'
 
 // Internal Dependencies
 import DB_URL from './dao/dbUrl.js'
@@ -13,6 +14,7 @@ import Routes from './routes/router.js'
 import errorHandler from './middleware/errorHandler.middleware.js'
 import { messagesService } from './dao/services/messages.service.js'
 
+// App
 const app = express()
 
 app.use(express.json())
@@ -20,10 +22,12 @@ app.use(express.static(process.cwd() + '/src/public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser('cacioypepe'))
 
+// Handlebars
 app.engine('handlebars', engine())
 app.set('view engine', 'handlebars')
 app.set('views', process.cwd() + '/src/views')
 
+// Session
 app.use(
   session({
     store: new MongoStore({
@@ -34,16 +38,22 @@ app.use(
   })
 )
 
+// Passport
+app.use(passport.initialize())
+
+// Routes
 app.use('/', Routes)
 
+// Errors
 app.use(errorHandler)
 
+// Connection
 const PORT = 8080
 const httpServer = app.listen(PORT, () => {
   console.log(`Server listening @ http://localhost:${PORT}`)
 })
-/* Socket */
 
+//Socket
 const socketServer = new Server(httpServer)
 
 socketServer.on('connection', socket => {
