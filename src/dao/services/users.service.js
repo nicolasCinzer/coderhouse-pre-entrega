@@ -1,14 +1,14 @@
-import { ServerError, ValidationError, AuthError } from '../../errors/errors.js'
+import { ValidationError, AuthError, NotFoundError } from '../../errors/errors.js'
 import { usersModel } from '../models/users.model.js'
-import { hashData } from '../../utils/index.js'
+import { hashData, compareData } from '../../utils/index.js'
 
 class UsersService {
   async findById(id) {
-    const response = await usersModel.findById(id)
+    const user = await usersModel.findById(id)
 
     if (!user) throw new ValidationError('User not Found')
 
-    return response
+    return user
   }
 
   async findByEmail(email) {
@@ -23,43 +23,57 @@ class UsersService {
     }
 
     try {
-      const password = await hashData(req.body.password)
+      const password = await hashData(user.password)
 
-      const response = await usersModel.createOne({ ...user, password })
+      const newUser = await usersModel.create({ ...user, password })
 
-      return response
+      return newUser
     } catch (error) {
-      throw new ServerError(error)
+      throw new Error(error)
+    }
+  }
+
+  async createFromGithub(user) {
+    if (!user.isGithub) throw new ValidationError('This user is not from Github')
+
+    if (!user.first_name || !user.last_name || !user.email) throw new ValidationError('Some data is missing!')
+
+    try {
+      const newUser = await usersModel.create(user)
+
+      return newUser
+    } catch (error) {
+      throw new Error(error)
     }
   }
 
   async checkPassword({ email, password }) {
-    if (!email || !password) {
-      throw new ValidationError('Some data is missing!')
-    }
+    if (!email || !password) throw new ValidationError('Some data is missing!')
 
-    const user = await userService.findByEmail(email)
+    const user = await this.findByEmail(email)
 
-    const isCorrectPw = await compareData(isCorrectPw, user.password)
+    if (!user) throw new NotFoundError(`User identified by email: ${email} not found!`)
 
-    if (!isCorrectPw) {
-      throw new AuthError('Password is not correct.')
-    }
+    const isCorrectPw = await compareData(password, user.password)
+
+    if (!isCorrectPw) throw new AuthError('Password is not correct.')
+
+    return user
   }
 
-  async updatePassword({ email, newPassword }) {
+  async updatePassword({ email, password: newPassword }) {
     try {
       if (!email || !newPassword) {
         throw new ValidationError('Some data is missing!')
       }
 
-      const user = await userService.findByEmail(req.body.email)
+      const user = await this.findByEmail(email)
 
-      user.password = hashData(newPassword)
+      user.password = await hashData(newPassword)
 
       return user.save()
     } catch (error) {
-      throw new ServerError(error)
+      throw new Error(error)
     }
   }
 }

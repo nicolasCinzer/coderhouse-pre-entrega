@@ -2,7 +2,6 @@ import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { Strategy as GitHubStratergy } from 'passport-github2'
 import { userService } from './dao/services/users.service.js'
-import { compareData } from './utils.js'
 
 passport.use(
   'signup',
@@ -11,21 +10,13 @@ passport.use(
       passReqToCallback: true,
       usernameField: 'email'
     },
-    async (req, email, password, done) => {
-      const { first_name, last_name } = req.body
-
-      if (!email || !password || !first_name || !last_name) {
-        done(null, false)
-      }
-
-      const user = { first_name, last_name, email, password }
-
+    async (req, _, __, done) => {
       try {
-        const newUser = await userService.create(user)
+        const newUser = await userService.create(req.body)
 
-        done(null, newUser)
+        return done(null, newUser)
       } catch (error) {
-        done(error)
+        return done(error)
       }
     }
   )
@@ -35,41 +26,30 @@ passport.use(
   'login',
   new LocalStrategy(
     {
+      passReqToCallback: true,
       usernameField: 'email'
     },
-    async (email, password, done) => {
-      if (!email || !password) {
-        done(null, false)
-      }
+    async (req, email, password, done) => {
       try {
-        const user = await userService.findByEmail(email)
+        const user = await userService.checkPassword({ email, password })
 
-        if (!user) done(null, false)
+        const sessionInfo =
+          email === process.env.ADMIN_MAIL && password === process.env.ADMIN_PASSWORD
+            ? {
+                email,
+                first_name: user.first_name,
+                isAdmin: true
+              }
+            : {
+                email,
+                first_name: user.first_name,
+                isAdmin: false
+              }
 
-        const isCorrectPw = await compareData(password, user.password)
-
-        if (!isCorrectPw) {
-          done(null, false)
-        }
-
-        // const sessionInfo =
-        //   email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD
-        //     ? {
-        //         email,
-        //         first_name: user.first_name,
-        //         isAdmin: true
-        //       }
-        //     : {
-        //         email,
-        //         first_name: user.first_name,
-        //         isAdmin: false
-        //       }
-
-        // req.session.user = sessionInfo
-
-        done(null, user)
+        return done(null, sessionInfo)
       } catch (error) {
-        done(error)
+        if (error.statusCode) return done(null, false)
+        return done(error)
       }
     }
   )
@@ -79,9 +59,9 @@ passport.use(
   'github',
   new GitHubStratergy(
     {
-      clientID: GITHUB_CLIENT_ID,
-      clientSecret: GITHUB_CLIENT_SECRET,
-      callbackURL: GITHUB_CALLBACK_URL
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: process.env.GITHUB_CALLBACK_URL
     },
     async (accessToken, resfreshToken, profile, done) => {
       const { email, name } = profile._json
@@ -97,33 +77,40 @@ passport.use(
           if (!isGithub) return done(null, false)
         }
 
+        const nameInfo = name.split(' ')
         const userInfo = {
-          first_name: name.split(' ')[0],
-          last_name: name.split(' ')[1],
+          first_name: nameInfo[0],
+          last_name: nameInfo[nameInfo.length - 1],
           email,
           isGithub: true
         }
 
-        const newUser = await userService.create(userInfo)
+        const newUser = await userService.createFromGithub(userInfo)
 
-        done(null, newUser)
+        return done(null, newUser)
       } catch (error) {
-        done(error)
+        return done(error)
       }
     }
   )
 )
 
 passport.serializeUser((user, done) => {
-  done(null, user._id)
-})
-
-passport.deserializeUser((id, done) => {
   try {
-    const user = userService.findById(id)
-
-    done(null, user)
+    return done(null, user._id)
   } catch (error) {
-    done(error)
+    return done(error)
   }
 })
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await userService.findById(id)
+
+    return done(null, user)
+  } catch (error) {
+    return done(error)
+  }
+})
+
+export default passport

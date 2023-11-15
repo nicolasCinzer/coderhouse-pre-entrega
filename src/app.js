@@ -5,7 +5,6 @@ import { Server } from 'socket.io'
 import cookieParser from 'cookie-parser'
 import MongoStore from 'connect-mongo'
 import session from 'express-session'
-import passport from 'passport'
 
 // Internal Dependencies
 import DB_URL from './dao/dbUrl.js'
@@ -13,6 +12,7 @@ import './dao/configDB.js'
 import Routes from './routes/router.js'
 import errorHandler from './middleware/errorHandler.middleware.js'
 import { messagesService } from './dao/services/messages.service.js'
+import passport from './passport.js'
 
 // App
 const app = express()

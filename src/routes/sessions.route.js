@@ -1,34 +1,36 @@
 import { Router } from 'express'
 import passport from 'passport'
-import { signup, signout, login, profile, resetPassword } from '../controllers/sessions.controller.js'
+import { signout, profile, resetPassword } from '../controllers/sessions.controller.js'
 
 export const router = Router()
 
-// router.post('/sessions/signup', signup)
 router.post(
   '/sessions/signup',
   passport.authenticate('signup', {
-    successRedirect: '/profile',
+    successRedirect: '/login',
     failureRedirect: '/error'
   })
 )
 
 router.post('/sessions/signout', signout)
 
-// router.post('/sessions/login', login)
 router.post(
   '/sessions/login',
   passport.authenticate('login', {
-    successRedirect: '/profile',
-    failureRedirect: '/error'
+    successRedirect: '/home',
+    failureRedirect: '/signup'
   })
 )
 
 router.get('/sessions/auth/github', passport.authenticate('github', { scope: ['user:email'] }))
 
-router.get('/sessions/callback', passport.authenticate('github'), (req, res) => {
-  res.send('testing')
-})
+router.get(
+  '/sessions/auth/github/callback',
+  passport.authenticate('github', {
+    successRedirect: '/home',
+    failureRedirect: '/login'
+  })
+)
 
 router.get('/sessions/profile', profile)
 

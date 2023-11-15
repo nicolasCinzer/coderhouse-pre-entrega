@@ -1,13 +1,17 @@
+import { productsService, cartsService, userService } from '../dao/services/index.services.js'
+
 export const renderChat = (_, res) => {
   res.render('chat')
 }
 
 export const renderHome = async (req, res) => {
-  const { user } = req.session
+  const { user: userId } = req.session?.passport || {}
 
-  if (!user) {
+  if (!userId) {
     return res.redirect('/login')
   }
+
+  const user = await userService.findById(userId)
 
   const { limit, page, sort, query } = req.query
 
@@ -50,7 +54,7 @@ export const renderCart = async (req, res) => {
 }
 
 export const renderLogin = (req, res) => {
-  if (req.session?.user) {
+  if (req.session?.passport) {
     return res.redirect('/home')
   }
 
@@ -60,7 +64,7 @@ export const renderLogin = (req, res) => {
 }
 
 export const renderSignup = (req, res) => {
-  if (req.session?.user) {
+  if (req.session?.passport) {
     return res.redirect('/home')
   }
 
@@ -70,8 +74,7 @@ export const renderSignup = (req, res) => {
 }
 
 export const renderProfile = (req, res) => {
-  const { user } = req.session
-
+  const { user } = req.session.passport
   const view = 'profile'
 
   res.render(view, { user, baseClass: view })
@@ -79,6 +82,12 @@ export const renderProfile = (req, res) => {
 
 export const renderResetPasword = (_, res) => {
   const view = 'resetPassword'
+
+  res.render(view)
+}
+
+export const renderError = (_, res) => {
+  const view = 'error'
 
   res.render(view)
 }
