@@ -1,6 +1,5 @@
 import { connect } from 'mongoose'
-import DB_URL from './dbUrl.js'
 
-connect(DB_URL)
+connect(process.env.DB_URL)
   .then(console.log('DB Connected!'))
   .catch(err => console.log(err))

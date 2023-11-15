@@ -1,5 +1,5 @@
 import { productsModel as PM } from '../models/products.model.js'
-import { ValidationError, ServerError, NotFoundError } from '../../errors/errors.js'
+import { ValidationError, NotFoundError } from '../../errors/errors.js'
 
 class ProductsService {
   async getProducts({ limit = 10, page = 1, sort = 'def', query = {} } = {}) {
@@ -16,7 +16,7 @@ class ProductsService {
 
       return res
     } catch (err) {
-      throw new ServerError(err.message)
+      throw new Error(err.message)
     }
   }
 
@@ -28,7 +28,7 @@ class ProductsService {
 
       return product
     } catch (err) {
-      throw new ServerError(err.message)
+      throw new Error(err.message)
     }
   }
 
@@ -39,7 +39,7 @@ class ProductsService {
       const res = await PM.create(item)
       return res
     } catch (err) {
-      throw new ServerError(err.message)
+      throw new Error(err.message)
     }
   }
 
@@ -48,7 +48,7 @@ class ProductsService {
       const res = await PM.findByIdAndUpdate(id, product)
       return res
     } catch (err) {
-      throw new ServerError(err.message)
+      throw new Error(err.message)
     }
   }
 
@@ -57,7 +57,7 @@ class ProductsService {
       const res = await PM.findByIdAndRemove(id)
       return res
     } catch (err) {
-      throw new ServerError(err.message)
+      throw new Error(err.message)
     }
   }
 }

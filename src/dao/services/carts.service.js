@@ -1,5 +1,5 @@
 import { cartsModel as CM } from '../models/carts.model.js'
-import { NotAvailableError, ServerError, ValidationError, NotFoundError, OutOfStockError } from '../../errors/errors.js'
+import { NotAvailableError, ValidationError, NotFoundError, OutOfStockError } from '../../errors/errors.js'
 import { Types } from 'mongoose'
 
 class CartsService {
@@ -11,7 +11,7 @@ class CartsService {
 
       return res
     } catch (err) {
-      throw new ServerError(err)
+      throw new Error(err)
     }
   }
 
@@ -23,7 +23,7 @@ class CartsService {
 
       return res
     } catch (err) {
-      throw new ServerError(err)
+      throw new Error(err)
     }
   }
 
@@ -40,7 +40,7 @@ class CartsService {
       await product.save()
       return cart.save()
     } catch (err) {
-      throw new ServerError(err)
+      throw new Error(err)
     }
   }
 
@@ -54,7 +54,7 @@ class CartsService {
 
       return cart.save()
     } catch (err) {
-      throw new ServerError(err)
+      throw new Error(err)
     }
   }
 
@@ -76,7 +76,7 @@ class CartsService {
 
       return cart.save()
     } catch (err) {
-      throw new ServerError(err)
+      throw new Error(err)
     }
   }
 
@@ -88,7 +88,7 @@ class CartsService {
 
       return cart.save()
     } catch (err) {
-      throw new ServerError(err)
+      throw new Error(err)
     }
   }
 
@@ -106,7 +106,7 @@ class CartsService {
 
       return cart.save()
     } catch (err) {
-      throw new ServerError(err)
+      throw new Error(err)
     }
   }
 }

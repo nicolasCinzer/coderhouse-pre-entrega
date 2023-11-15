@@ -41,15 +41,4 @@ class AuthError extends BaseError {
   }
 }
 
-class ServerError extends BaseError {
-  constructor(message = 'Server Error') {
-    if (message.includes('duplicate key')) {
-      super(400, message)
-      return
-    }
-
-    super(500, message)
-  }
-}
-
-export { ServerError, NotFoundError, NotAvailableError, ValidationError, ConflictError, OutOfStockError, AuthError }
+export { NotFoundError, NotAvailableError, ValidationError, ConflictError, OutOfStockError, AuthError }
