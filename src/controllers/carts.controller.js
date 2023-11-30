@@ -1,4 +1,4 @@
-import { productsService, cartsService } from '../dao/services/index.services.js'
+import { productsService, cartsService } from '../services/index.services.js'
 import { success } from '../utils/index.js'
 
 export const createCart = async (_, res, next) => {

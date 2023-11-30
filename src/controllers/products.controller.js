@@ -1,4 +1,4 @@
-import { productsService } from '../dao/services/index.services.js'
+import { productsService } from '../services/index.services.js'
 import { NotFoundError } from '../errors/errors.js'
 import { success } from '../utils/index.js'
 

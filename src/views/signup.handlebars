@@ -10,6 +10,10 @@
       <input class='{{baseClass}}-input-text' type='text' name='last_name' id='last_name' />
     </div>
     <div class='{{baseClass}}-input-component'>
+      <div class='{{baseClass}}-input-label'>Age:</div>
+      <input class='{{baseClass}}-input-text' type='number' name='age' id='age' />
+    </div>
+    <div class='{{baseClass}}-input-component'>
       <div class='{{baseClass}}-input-label'>Email:</div>
       <input class='{{baseClass}}-input-text' type='email' name='email' id='email' />
     </div>
@@ -24,3 +28,5 @@
 </form>
 
 <a href='/login'>Already have an account?</a>
+<button><a href='/api/sessions/auth/github'>GITHUB</a></button>
+<button><a href='/api/sessions/auth/google'>GOOGLE</a></button>

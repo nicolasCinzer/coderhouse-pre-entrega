@@ -1,4 +1,4 @@
-import { userService } from '../dao/services/index.services.js'
+import { userService } from '../services/index.services.js'
 
 const paths = {
   login: '/login',

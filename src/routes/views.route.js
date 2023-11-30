@@ -9,20 +9,25 @@ import {
   renderResetPasword,
   renderError
 } from '../controllers/views.controller.js'
+import passport from 'passport'
 
 export const router = Router()
 
-router.get('/chat', renderChat)
+router.get('/', (req, res) => {
+  res.redirect('/home')
+})
 
-router.get('/home', renderHome)
+router.get('/chat', passport.authenticate('jwt', { session: false }), renderChat)
 
-router.get('/cart/:cid', renderCart)
+router.get('/home', passport.authenticate('jwt', { session: false, failureRedirect: '/login' }), renderHome)
+
+router.get('/cart/:cid', passport.authenticate('jwt', { session: false }), renderCart)
 
 router.get('/login', renderLogin)
 
 router.get('/signup', renderSignup)
 
-router.get('/profile', renderProfile)
+router.get('/profile', passport.authenticate('jwt', { session: false }), renderProfile)
 
 router.get('/resetPassword', renderResetPasword)
 

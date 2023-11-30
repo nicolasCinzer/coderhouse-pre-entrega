@@ -1,3 +1,3 @@
-export default ({ res, message = '', features = [], restOfProperties = {} }) => {
+export const success = ({ res, message = '', features = [], restOfProperties = {} }) => {
   return res.json({ message, payload: features, ...restOfProperties })
 }
