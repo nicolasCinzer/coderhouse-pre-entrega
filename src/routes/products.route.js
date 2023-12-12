@@ -3,12 +3,12 @@ import { getProducts, getProductByID, createProduct, updateProduct, deleteProduc
 
 export const router = Router()
 
-router.get('/products', getProducts)
+router.get('/products', passport.authenticate('jwt', { session: false }), getProducts)
 
-router.get('/products/:pid', getProductByID)
+router.get('/products/:pid', passport.authenticate('jwt', { session: false }), getProductByID)
 
-router.post('/products', createProduct)
+router.post('/products', passport.authenticate('jwt', { session: false }), createProduct)
 
-router.put('/products/:pid', updateProduct)
+router.put('/products/:pid', passport.authenticate('jwt', { session: false }), updateProduct)
 
-router.delete('/products/:pid', deleteProduct)
+router.delete('/products/:pid', passport.authenticate('jwt', { session: false }), deleteProduct)

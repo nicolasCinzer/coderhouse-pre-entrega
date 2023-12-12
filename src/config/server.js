@@ -16,14 +16,14 @@ export const runApp = () => {
   const app = express()
 
   app.use(express.json())
-  app.use(express.static(process.cwd() + '/src/public'))
+  app.use(express.static(process.cwd() + '/public'))
   app.use(express.urlencoded({ extended: true }))
   app.use(cookieParser(process.env.COOKIE_SECRET_KEY))
 
   // Handlebars
   app.engine('handlebars', engine())
   app.set('view engine', 'handlebars')
-  app.set('views', process.cwd() + '/src/views')
+  app.set('views', process.cwd() + '/views')
 
   // Session
   app.use(

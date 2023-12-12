@@ -15,6 +15,21 @@ export const signout = async (req, res, next) => {
   }
 }
 
+export const login = async (req, res) => {
+  const payload = {
+    email: req.user.email,
+    first_name: req.user.first_name
+  }
+
+  const token = generateToken(payload)
+
+  res.cookie('token', token, { maxAge: 60000, httpOnly: true }).redirect('/home')
+}
+
+export const current = async (req, res) => {
+  res.json({ user: req.user })
+}
+
 export const profile = () => {}
 
 export const resetPassword = async (req, res, next) => {
