@@ -1,25 +1,27 @@
 import { cartsModel } from '../models/carts.model.js'
-import { NotAvailableError, OutOfStockError } from '../errors/errors.js'
+import { NotAvailableError, OutOfStockError, NotFoundError } from '../errors/errors.js'
 
 export const getCartById = async _id => {
   try {
-    return cartsModel.findOne({ _id }).populate('products.product')
+    const cart = cartsModel.findOne({ _id }).populate('products.product')
+
+    if (!cart) throw new NotFoundError(`Cart identified by ID: '${id}' not Found`)
+
+    return cart
   } catch (err) {
     throw new Error(err)
   }
 }
 
-export const createCart = async cart => {
+export const createCart = async () => {
   try {
-    return cartsModel.create(cart)
+    return cartsModel.create()
   } catch (err) {
     throw new Error(err)
   }
 }
 
 export const addProductToCart = async ({ cart, pid }) => {
-  const pid = product._id
-
   try {
     const index = cart.products.findIndex(item => item.product.equals(pid))
 
@@ -31,7 +33,7 @@ export const addProductToCart = async ({ cart, pid }) => {
   }
 }
 
-export const addMultipleProducts = async (cart, products) => {
+export const addMultipleProducts = async ({ cart, products }) => {
   try {
     cart.products = products
 
@@ -41,15 +43,13 @@ export const addMultipleProducts = async (cart, products) => {
   }
 }
 
-export const updateQuantity = async (cart, product = {}, quantity) => {
-  const pid = product._id
-
+export const updateQuantity = async ({ cart, pid, stock, quantity }) => {
   try {
     const index = cart.products.findIndex(item => item.product.equals(pid))
 
     if (index === -1) throw new NotAvailableError('This item is not in the Cart!')
 
-    const updatedStock = product.stock - (quantity - cart.products[index].quantity)
+    const updatedStock = stock - (quantity - cart.products[index].quantity)
 
     if (updatedStock < 0) throw new OutOfStockError('This item is out of stock! Please submit a lower quantity.')
 
@@ -71,9 +71,7 @@ export const deleteAllProducts = async cart => {
   }
 }
 
-export const deleteCartItem = async (cart, product = {}) => {
-  const pid = product._id
-
+export const deleteCartItem = async ({ cart, pid }) => {
   try {
     const index = cart.products.findIndex(item => item.product.equals(pid))
 

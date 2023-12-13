@@ -1,4 +1,4 @@
-import { productsService } from '../services/index.services.js'
+import { productsService } from '../services/products.service.js'
 import { NotFoundError } from '../errors/errors.js'
 import { success } from '../utils/index.js'
 
@@ -31,8 +31,6 @@ export const getProductByID = async (req, res, next) => {
   try {
     const product = await productsService.getProductById(pid)
 
-    if (!product) throw new NotFoundError(`Product identified by ID: ${pid} not Found`)
-
     success({ res, message: 'Product found!', features: product })
   } catch (err) {
     next(err)
@@ -56,11 +54,9 @@ export const updateProduct = async (req, res, next) => {
   const properties = req.body
 
   try {
-    const productUpdated = await productsService.updateProduct(pid, properties)
+    const updatedProductsds = await productsService.updateProduct(pid, properties)
 
-    if (!productUpdated) throw new NotFoundError(`Product identified by ID: ${pid} not Found`)
-
-    res.success({ res, message: 'Product updated successfully!', features: { ...productUpdated.toJSON(), ...properties } })
+    res.success({ res, message: 'Product updated successfully!', features: { ...updatedProductsds.toJSON(), ...properties } })
   } catch (err) {
     next(err)
   }
@@ -70,11 +66,9 @@ export const deleteProduct = async (req, res, next) => {
   const { pid } = req.params
 
   try {
-    const productDeleted = await productsService.deleteProduct(pid)
+    const deletedProduct = await productsService.deleteProduct(pid)
 
-    if (!productDeleted) throw new NotFoundError(`Product identified by ID: ${pid} not Found`)
-
-    success({ res, message: 'Product deleted successfully!', features: productDeleted })
+    success({ res, message: 'Product deleted successfully!', features: deletedProduct })
   } catch (err) {
     next(err)
   }

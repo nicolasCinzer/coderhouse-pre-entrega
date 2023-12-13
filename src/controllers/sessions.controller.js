@@ -1,4 +1,4 @@
-import { userService } from '../services/index.services.js'
+import { usersService } from '../services/users.service'
 
 const paths = {
   login: '/login',
@@ -16,12 +16,9 @@ export const signout = async (req, res, next) => {
 }
 
 export const login = async (req, res) => {
-  const payload = {
-    email: req.user.email,
-    first_name: req.user.first_name
-  }
+  const { email, first_name } = req.user
 
-  const token = generateToken(payload)
+  const token = usersService.login({ email, first_name })
 
   res.cookie('token', token, { maxAge: 60000, httpOnly: true }).redirect('/home')
 }
@@ -33,8 +30,10 @@ export const current = async (req, res) => {
 export const profile = () => {}
 
 export const resetPassword = async (req, res, next) => {
+  const { email, password } = req.body
+
   try {
-    await userService.updatePassword(req.body)
+    await usersService.updatePassword({ email, password })
 
     res.redirect(paths.login)
   } catch (err) {
