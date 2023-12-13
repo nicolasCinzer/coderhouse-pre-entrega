@@ -3,7 +3,7 @@ import { Strategy as LocalStrategy } from 'passport-local'
 import { Strategy as GitHubStrategy } from 'passport-github2'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { ExtractJwt, Strategy as JWTStrategy } from 'passport-jwt'
-import { userService } from '../services/index.services.js'
+import { usersService } from '../services/index.services.js'
 
 passport.use(
   'signup',
@@ -14,7 +14,7 @@ passport.use(
     },
     async (req, _, __, done) => {
       try {
-        const newUser = await userService.create(req.body)
+        const newUser = await usersService.create(req.body)
 
         return done(null, newUser)
       } catch (error) {
@@ -32,7 +32,7 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        const user = await userService.checkPassword({ email, password })
+        const user = await usersService.checkPassword({ email, password })
 
         return done(null, user)
       } catch (error) {
@@ -55,7 +55,7 @@ passport.use(
       const { email, name } = profile._json
 
       try {
-        const user = await userService.findByEmail(email)
+        const user = await usersService.findByEmail(email)
 
         if (user) {
           const { isGithub } = user
@@ -73,7 +73,7 @@ passport.use(
           isGithub: true
         }
 
-        const newUser = await userService.createFromGithub(userInfo)
+        const newUser = await usersService.createFromGithub(userInfo)
 
         return done(null, newUser)
       } catch (error) {
@@ -95,7 +95,7 @@ passport.use(
       const { email, name } = profile._json
 
       try {
-        const user = await userService.findByEmail(email)
+        const user = await usersService.findByEmail(email)
 
         if (user) {
           const { isGithub } = user
@@ -113,7 +113,7 @@ passport.use(
           isGithub: true
         }
 
-        const newUser = await userService.createFromGithub(userInfo)
+        const newUser = await usersService.createFromGithub(userInfo)
 
         return done(null, newUser)
       } catch (error) {
@@ -138,7 +138,7 @@ passport.use(
       const { email } = payload
 
       try {
-        const user = await userService.findByEmail(email)
+        const user = await usersService.findByEmail(email)
 
         if (!user) return done(null, false)
 
@@ -161,7 +161,7 @@ passport.use(
       const { email } = payload
 
       try {
-        const user = await userService.findByEmail(email)
+        const user = await usersService.findByEmail(email)
 
         if (!user) return done(null, false)
 
@@ -183,7 +183,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await userService.findById(id)
+    const user = await usersService.findById(id)
 
     return done(null, user)
   } catch (error) {
