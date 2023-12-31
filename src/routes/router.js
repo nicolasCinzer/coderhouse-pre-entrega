@@ -9,9 +9,9 @@ const router = Router()
 const root = '/'
 const api = '/api'
 
-router.use(api, cartsRouter)
 router.use(api, productsRouter)
-router.use(root, viewsRouter)
+router.use(api, cartsRouter)
 router.use(api, sessionsRouter)
+router.use(root, viewsRouter)
 
 export default router

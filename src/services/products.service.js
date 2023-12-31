@@ -1,7 +1,15 @@
-import { getProducts, getProductById, addProduct, updateProduct, deleteProduct } from '../dao/products.dao.js'
+import { getProducts, getPaginatedProducts, getProductById, addProduct, updateProduct, deleteProduct } from '../DAL/dao/products.dao.js'
 
 class ProductsService {
-  async getProducts({ limit = 10, page = 1, sort = 'def', query = {} } = {}) {
+  async getProducts({ limit = 10, page = 1, sort = 'def', query = {} } = {}, paginated = false) {
+    if (!paginated) {
+      try {
+        return getProducts(query)
+      } catch (err) {
+        throw new Error(err)
+      }
+    }
+
     try {
       const sortOpt = {
         asc: { price: 1 },
@@ -11,7 +19,7 @@ class ProductsService {
 
       const opt = { limit: parseInt(limit), page: parseInt(page), sort: sortOpt[sort] }
 
-      return getProducts({ opt, query })
+      return getPaginatedProducts({ opt, query })
     } catch (err) {
       throw new Error(err.message)
     }

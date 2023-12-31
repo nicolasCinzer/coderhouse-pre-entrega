@@ -1,4 +1,4 @@
-import { ValidationError } from '../errors/errors.js'
+import { ValidationError } from '../../errors/errors.js'
 import { usersModel } from '../models/users.model.js'
 
 export const findById = async id => {

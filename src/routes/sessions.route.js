@@ -1,17 +1,23 @@
 import { Router } from 'express'
-import passport from 'passport'
-import { generateToken } from '../utils/generateToken.js'
-import { signout, profile, resetPassword, login, current } from '../controllers/sessions.controller.js'
+import passport from '../config/passport.js'
+import { signout, resetPassword, login, current } from '../controllers/sessions.controller.js'
+import { ValidationError } from '../errors/errors.js'
 
 export const router = Router()
 
-router.post(
-  '/sessions/signup',
-  passport.authenticate('signup', {
-    successRedirect: '/login',
-    failureRedirect: '/error'
-  })
-)
+router.post('/sessions/signup', (req, res, next) => {
+  passport.authenticate(
+    'signup',
+    {
+      successRedirect: '/login'
+    },
+    (err, user, { message }) => {
+      if (err) return next(err)
+
+      if (!user) return next(new ValidationError(message))
+    }
+  )(req, res, next)
+})
 
 router.post(
   '/sessions/login',
@@ -34,7 +40,5 @@ router.get(
     failureRedirect: '/login'
   })
 )
-
-router.get('/sessions/profile', profile)
 
 router.post('/sessions/resetPassword', resetPassword)

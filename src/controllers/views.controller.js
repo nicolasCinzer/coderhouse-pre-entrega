@@ -1,21 +1,20 @@
-import { productsService, cartsService, userService } from '../services/index.services.js'
+import { productsService } from '../services/products.service.js'
+import { cartsService } from '../services/carts.service.js'
 
 export const renderChat = (_, res) => {
   res.render('chat')
 }
 
 export const renderHome = async (req, res) => {
-  const { id } = req.user || {}
+  const { id, full_name } = req.user || {}
 
   if (!id) {
     return res.redirect('/login')
   }
 
-  const user = await userService.findById(id)
-
   const { limit, page, sort, query } = req.query
 
-  const products = await productsService.getProducts({ limit, page, sort, query })
+  const products = await productsService.getProducts({ limit, page, sort, query }, true)
 
   const attributes = {
     products: products.docs
@@ -25,7 +24,7 @@ export const renderHome = async (req, res) => {
     totalPages: products.totalPages,
     hasPrevPage: products.hasPrevPage,
     hasNextPage: products.hasNextPage,
-    user: user.first_name
+    user: full_name
   }
 
   products.hasPrevPage ? (attributes['prevPage'] = `http://localhost:8080/home?page=${products.prevPage}`) : null

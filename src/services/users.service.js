@@ -1,4 +1,4 @@
-import { findByEmail, findById, create } from '../dao/users.dao.js'
+import { findByEmail, findById, create } from '../DAL/dao/users.dao.js'
 import { ValidationError, AuthError, NotFoundError } from '../errors/errors.js'
 import { hashData, compareData, generateToken } from '../utils/index.js'
 
@@ -70,7 +70,7 @@ class UsersService {
       throw new Error(error)
     }
   }
-
+  
   async login({ email, first_name }) {
     const payload = {
       email,

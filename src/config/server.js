@@ -9,7 +9,7 @@ import 'dotenv/config.js'
 // Internal Dependencies
 import Routes from '../routes/router.js'
 import errorHandler from '../middleware/errorHandler.middleware.js'
-import { messagesService } from '../services/index.services.js'
+import messagesService from '../services/messages.service.js'
 import passport from './passport.js'
 
 export const runApp = () => {

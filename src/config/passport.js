@@ -3,7 +3,9 @@ import { Strategy as LocalStrategy } from 'passport-local'
 import { Strategy as GitHubStrategy } from 'passport-github2'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { ExtractJwt, Strategy as JWTStrategy } from 'passport-jwt'
-import { usersService } from '../services/index.services.js'
+import { usersService } from '../services/users.service.js'
+import { UsersDTO } from '../DAL/dto/users.dto.js'
+import { cartsService } from '../services/carts.service.js'
 
 passport.use(
   'signup',
@@ -14,11 +16,17 @@ passport.use(
     },
     async (req, _, __, done) => {
       try {
-        const newUser = await usersService.create(req.body)
+        const cart = await cartsService.createCart()
+
+        const reqUser = UsersDTO.request({ ...req.body, cart: cart })
+
+        const newUser = await usersService.create(reqUser)
 
         return done(null, newUser)
       } catch (error) {
-        return done(error)
+        if (error.message.includes('duplicate key')) return done(null, false, { message: 'Email already exists!' })
+
+        return done(error, null, { message: error.message })
       }
     }
   )
@@ -142,30 +150,9 @@ passport.use(
 
         if (!user) return done(null, false)
 
-        done(null, user)
-      } catch (error) {
-        done(error)
-      }
-    }
-  )
-)
+        const res = UsersDTO.response(user)
 
-passport.use(
-  'jwt',
-  new JWTStrategy(
-    {
-      jwtFromRequest: ExtractJwt.fromExtractors([fromCookies]),
-      secretOrKey: process.env.JWT_SECRET_KEY
-    },
-    async (payload, done) => {
-      const { email } = payload
-
-      try {
-        const user = await usersService.findByEmail(email)
-
-        if (!user) return done(null, false)
-
-        done(null, user)
+        done(null, res)
       } catch (error) {
         done(error)
       }

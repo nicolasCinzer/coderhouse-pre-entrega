@@ -1,7 +1,15 @@
 import { productsModel as PM } from '../models/products.model.js'
-import { NotFoundError } from '../errors/errors.js'
+import { NotFoundError } from '../../errors/errors.js'
 
-export const getProducts = async ({ opt = {}, query = {} }) => {
+export const getProducts = async query => {
+  try {
+    return PM.find(query)
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+export const getPaginatedProducts = async ({ opt = {}, query = {} }) => {
   try {
     return PM.paginate(query, opt)
   } catch (err) {

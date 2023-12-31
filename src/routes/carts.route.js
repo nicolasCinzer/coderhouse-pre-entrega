@@ -6,22 +6,26 @@ import {
   addMultipleProductsToCart,
   deleteAllProductsFromCart,
   updateProductQty,
-  deleteProductFromCart
+  deleteProductFromCart,
+  purchase
 } from '../controllers/carts.controller.js'
-import passport from 'passport'
+import { checkCart } from '../middleware/checkCart.middleware.js'
+import passport from '../config/passport.js'
 
 export const router = Router()
 
-router.post('/carts', passport.authenticate('jwt', { session: false }), createCart)
+router.post('/carts', passport.authenticate('current', { session: false }), checkCart, createCart)
 
-router.get('/carts/:cid', passport.authenticate('jwt', { session: false }), getCartByID)
+router.get('/carts/:cid', passport.authenticate('current', { session: false }), checkCart, getCartByID)
 
-router.put('/carts/:cid', passport.authenticate('jwt', { session: false }), addMultipleProductsToCart)
+router.post('/carts/:cid', passport.authenticate('current', { session: false }), checkCart, addMultipleProductsToCart)
 
-router.delete('/carts/:cid', passport.authenticate('jwt', { session: false }), deleteAllProductsFromCart)
+router.delete('/carts/:cid', passport.authenticate('current', { session: false }), checkCart, deleteAllProductsFromCart)
 
-router.post('/carts/:cid/product/:pid', passport.authenticate('jwt', { session: false }), addProductToCart)
+router.post('/carts/:cid/product/:pid', passport.authenticate('current', { session: false }), checkCart, addProductToCart)
 
-router.put('/carts/:cid/product/:pid', passport.authenticate('jwt', { session: false }), updateProductQty)
+router.put('/carts/:cid/product/:pid', passport.authenticate('current', { session: false }), checkCart, updateProductQty)
 
-router.delete('/carts/:cid/product/:pid', passport.authenticate('jwt', { session: false }), deleteProductFromCart)
+router.delete('/carts/:cid/product/:pid', passport.authenticate('current', { session: false }), checkCart, deleteProductFromCart)
+
+router.post('/carts/:cid/purchase', passport.authenticate('current', { session: false }), checkCart, purchase)

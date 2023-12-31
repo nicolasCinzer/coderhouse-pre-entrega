@@ -6,7 +6,7 @@ export const getProducts = async (req, res, next) => {
   const { limit, page, sort, query } = req.query
 
   try {
-    const products = await productsService.getProducts({ limit, page, sort, query })
+    const products = await productsService.getProducts({ limit, page, sort, query }, true)
 
     const restOfProperties = {
       totalPages: products.totalPages,
@@ -50,13 +50,13 @@ export const createProduct = async (req, res, next) => {
 }
 
 export const updateProduct = async (req, res, next) => {
-  const { pid } = req.params
-  const properties = req.body
+  const { pid: id } = req.params
+  const product = req.body
 
   try {
-    const updatedProductsds = await productsService.updateProduct(pid, properties)
+    const updatedProducts = await productsService.updateProduct({ id, product })
 
-    res.success({ res, message: 'Product updated successfully!', features: { ...updatedProductsds.toJSON(), ...properties } })
+    success({ res, message: 'Product updated successfully!', features: { ...updatedProducts.toJSON(), ...product } })
   } catch (err) {
     next(err)
   }

@@ -1,4 +1,4 @@
-import { messagesModel } from '../models/messages.model.js'
+import { messagesModel } from '../DAL/models/messages.model.js'
 
 export const getMessages = async () => {
   const res = await messagesModel.find()
