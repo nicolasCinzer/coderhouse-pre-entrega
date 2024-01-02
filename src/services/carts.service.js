@@ -1,5 +1,7 @@
 import { getCartById, createCart, addProductToCart, updateQuantity, deleteAllProducts, deleteCartItem } from '../DAL/dao/carts.dao.js'
 import { generateTicket } from '../DAL/dao/tickets.dao.js'
+import { createHash } from '../utils/createRandomHash.js'
+import { sendTicketMail } from '../utils/transporterNodemailer.js'
 import { productsService } from './products.service.js'
 
 class CartsService {
@@ -102,7 +104,8 @@ class CartsService {
 
       const ticket = {
         amount: productsPurchased.reduce((prev, curr) => prev + curr.total, 0),
-        purchaser: email
+        purchaser: email,
+        code: createHash()
       }
 
       const generatedTicket = await generateTicket(ticket)
@@ -110,6 +113,8 @@ class CartsService {
       cart.products = cart.products.filter(({ product }) => !productsPurchased.map(({ _id }) => _id.toString()).includes(product._id.toString()))
 
       cart.save()
+
+      await sendTicketMail({ to: email, ticketCode: generatedTicket.code, totalCost: ticket.amount, totalItems: productsPurchased.length })
 
       return { ticket: generatedTicket, nonStockedProducts }
     } catch (err) {
