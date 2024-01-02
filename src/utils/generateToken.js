@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
+import { jwtSecretKey } from '../config/config.js'
 
 export const generateToken = payload => {
-  return jwt.sign(payload, process.env.JWT_SECRET_KEY)
+  return jwt.sign(payload, jwtSecretKey)
 }

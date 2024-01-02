@@ -6,6 +6,15 @@ import { ExtractJwt, Strategy as JWTStrategy } from 'passport-jwt'
 import { usersService } from '../services/users.service.js'
 import { UsersDTO } from '../DAL/dto/users.dto.js'
 import { cartsService } from '../services/carts.service.js'
+import {
+  googleClientID,
+  googleClientSecret,
+  googleCallbackURL,
+  gitHubClientID,
+  gitHubCallbackURL,
+  gitHubClientSecret,
+  jwtSecretKey
+} from './config.js'
 
 passport.use(
   'signup',
@@ -55,9 +64,9 @@ passport.use(
   'github',
   new GitHubStrategy(
     {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URL
+      clientID: gitHubClientID,
+      clientSecret: gitHubClientSecret,
+      callbackURL: gitHubCallbackURL
     },
     async (accessToken, resfreshToken, profile, done) => {
       const { email, name } = profile._json
@@ -95,9 +104,9 @@ passport.use(
   'google',
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL
+      clientID: googleClientID,
+      clientSecret: googleClientSecret,
+      callbackURL: googleCallbackURL
     },
     async (accessToken, resfreshToken, profile, done) => {
       const { email, name } = profile._json
@@ -140,7 +149,7 @@ passport.use(
   new JWTStrategy(
     {
       jwtFromRequest: ExtractJwt.fromExtractors([fromCookies]),
-      secretOrKey: process.env.JWT_SECRET_KEY
+      secretOrKey: jwtSecretKey
     },
     async (payload, done) => {
       const { email } = payload

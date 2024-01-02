@@ -11,6 +11,7 @@ import Routes from '../routes/router.js'
 import errorHandler from '../middleware/errorHandler.middleware.js'
 import messagesService from '../services/messages.service.js'
 import passport from './passport.js'
+import { PORT, coockieSecretKey } from './config.js'
 
 export const runApp = () => {
   const app = express()
@@ -18,7 +19,7 @@ export const runApp = () => {
   app.use(express.json())
   app.use(express.static(process.cwd() + '/public'))
   app.use(express.urlencoded({ extended: true }))
-  app.use(cookieParser(process.env.COOKIE_SECRET_KEY))
+  app.use(cookieParser(coockieSecretKey))
 
   // Handlebars
   app.engine('handlebars', engine())
@@ -28,7 +29,7 @@ export const runApp = () => {
   // Session
   app.use(
     session({
-      secret: process.env.COOKIE_SECRET_KEY,
+      secret: coockieSecretKey,
       cookie: { maxAge: 60000 }
     })
   )
@@ -43,8 +44,8 @@ export const runApp = () => {
   app.use(errorHandler)
 
   // Connection
-  const httpServer = app.listen(process.env.PORT, () => {
-    console.log(`Server listening @ http://localhost:${process.env.PORT}`)
+  const httpServer = app.listen(PORT, () => {
+    console.log(`Server listening @ http://localhost:${PORT}`)
   })
 
   return httpServer
