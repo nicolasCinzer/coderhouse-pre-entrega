@@ -73,3 +73,9 @@ export const deleteProduct = async (req, res, next) => {
     next(err)
   }
 }
+
+export const mockingProducts = (req, res, next) => {
+  const amount = 100
+
+  success({ res, message: `${amount} Products mocked successfully!`, features: productsService.mocking(amount) })
+}

@@ -1,4 +1,5 @@
 import { getProducts, getPaginatedProducts, getProductById, addProduct, updateProduct, deleteProduct } from '../DAL/dao/products.dao.js'
+import { MockingProducts } from '../mocks/products.mock.js'
 
 class ProductsService {
   async getProducts({ limit = 10, page = 1, sort = 'def', query = {} } = {}, paginated = false) {
@@ -55,6 +56,10 @@ class ProductsService {
     } catch (err) {
       throw new Error(err.message)
     }
+  }
+
+  mocking(amount) {
+    return MockingProducts.randomProducts(amount)
   }
 }
 

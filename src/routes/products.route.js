@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getProducts, getProductByID, createProduct, updateProduct, deleteProduct } from '../controllers/products.controller.js'
+import { getProducts, getProductByID, createProduct, updateProduct, deleteProduct, mockingProducts } from '../controllers/products.controller.js'
 import passport from 'passport'
 import { auth } from '../middleware/auth.middleware.js'
 
@@ -14,3 +14,5 @@ router.post('/products', passport.authenticate('current', { session: false }), a
 router.put('/products/:pid', passport.authenticate('current', { session: false }), auth, updateProduct)
 
 router.delete('/products/:pid', passport.authenticate('current', { session: false }), auth, deleteProduct)
+
+router.get('/mockingproducts', mockingProducts)
