@@ -12,7 +12,7 @@ export const transporter = createTransport({
 export const sendTicketMail = async ({ to, ticketCode, totalItems, totalCost, attachments }) => {
   const mailOptions = {
     from: 'pichichi@ecommerce.com.ar',
-    to: 'upperwestcinzer@gmail.com',
+    to,
     subject: `Ticket de Compra Generado - COD:: ${ticketCode}`,
     html: `
       <h2>Compra realizada con exito!</h2>
