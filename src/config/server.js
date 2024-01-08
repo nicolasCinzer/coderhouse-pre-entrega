@@ -3,7 +3,6 @@ import express from 'express'
 import { engine } from 'express-handlebars'
 import { Server } from 'socket.io'
 import cookieParser from 'cookie-parser'
-import session from 'express-session'
 import 'dotenv/config.js'
 
 // Internal Dependencies
@@ -25,14 +24,6 @@ export const runApp = () => {
   app.engine('handlebars', engine())
   app.set('view engine', 'handlebars')
   app.set('views', process.cwd() + '/views')
-
-  // Session
-  app.use(
-    session({
-      secret: coockieSecretKey,
-      cookie: { maxAge: 60000 }
-    })
-  )
 
   // Passport
   app.use(passport.initialize())

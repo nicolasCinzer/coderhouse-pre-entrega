@@ -22,7 +22,8 @@ router.post('/sessions/signup', (req, res, next) => {
 router.post(
   '/sessions/login',
   passport.authenticate('login', {
-    failureRedirect: '/signup'
+    failureRedirect: '/signup',
+    session: false
   }),
   login
 )

@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker/locale/es_MX'
 
 export class MockingProducts {
-  static randomProducts(amount) {
+  static randomProducts(amount = 1) {
     return Array(amount)
       .fill(null)
       .map(() => ({
