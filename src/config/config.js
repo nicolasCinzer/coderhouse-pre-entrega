@@ -12,6 +12,7 @@ export const coockieSecretKey = process.env.COOKIE_SECRET_KEY
 export const PORT = process.env.PORT
 export const nodemailerEmail = process.env.NODEMAILER_EMAIL
 export const nodemailerPw = process.env.NODEMAILER_PASSWORD
+export const env = process.env.ENVIROMENT
 
 export default {
   databaseURI,
@@ -27,5 +28,6 @@ export default {
   coockieSecretKey,
   PORT,
   nodemailerEmail,
-  nodemailerPw
+  nodemailerPw,
+  env
 }

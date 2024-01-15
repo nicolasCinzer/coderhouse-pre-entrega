@@ -33,7 +33,7 @@ passport.use(
 
         return done(null, newUser)
       } catch (error) {
-        if (error.message.includes('duplicate key')) return done(null, false, { message: 'Email already exists!' })
+        if (error.message.includesAll('duplicate key', 'email')) return done(null, false, { message: 'Email already exists!' })
 
         return done(error, null, { message: error.message })
       }

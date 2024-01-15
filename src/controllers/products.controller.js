@@ -1,8 +1,9 @@
 import { productsService } from '../services/products.service.js'
-import { NotFoundError } from '../errors/errors.js'
 import { success } from '../utils/index.js'
+import { logger } from '../config/logger.js'
 
 export const getProducts = async (req, res, next) => {
+  logger.info('Products fetched!')
   const { limit, page, sort, query } = req.query
 
   try {

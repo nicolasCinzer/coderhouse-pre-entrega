@@ -11,6 +11,7 @@ import errorHandler from '../middleware/errorHandler.middleware.js'
 import messagesService from '../services/messages.service.js'
 import passport from './passport.js'
 import { PORT, coockieSecretKey } from './config.js'
+import '../utils/includesAll.js'
 
 export const runApp = () => {
   const app = express()

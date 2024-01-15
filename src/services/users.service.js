@@ -62,7 +62,7 @@ class UsersService {
       }
 
       const user = await findByEmail(email)
-
+      
       const password = await hashData(newPassword)
 
       return updatePassword({ password, user })
