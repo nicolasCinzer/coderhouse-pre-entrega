@@ -1,4 +1,5 @@
-import { findByEmail, findById, create } from '../DAL/dao/users.dao.js'
+import { findByEmail, findById, create, updatePassword, switchRole } from '../DAL/dao/users.dao.js'
+import { UsersDTO } from '../DAL/dto/users.dto.js'
 import { ValidationError, AuthError, NotFoundError } from '../errors/errors.js'
 import { hashData, compareData, generateToken } from '../utils/index.js'
 
@@ -56,21 +57,23 @@ class UsersService {
   }
 
   async updatePassword({ email, password: newPassword }) {
-    try {
-      if (!email || !newPassword) {
-        throw new ValidationError('Some data is missing!')
-      }
-
-      const user = await findByEmail(email)
-      
-      const password = await hashData(newPassword)
-
-      return updatePassword({ password, user })
-    } catch (error) {
-      throw new Error(error)
+    if (!email || !newPassword) {
+      throw new ValidationError('Some data is missing!')
     }
+
+    const user = await findByEmail(email)
+
+    const password = await hashData(newPassword)
+
+    return updatePassword({ password, user })
   }
-  
+
+  async switchRole(id) {
+    const user = await findById(id)
+
+    return UsersDTO.response(await switchRole(user))
+  }
+
   async login({ email, first_name }) {
     const payload = {
       email,

@@ -15,6 +15,7 @@ import {
   gitHubClientSecret,
   jwtSecretKey
 } from './config.js'
+import { AuthError } from '../errors/errors.js'
 
 passport.use(
   'signup',
@@ -33,9 +34,9 @@ passport.use(
 
         return done(null, newUser)
       } catch (error) {
-        if (error.message.includesAll('duplicate key', 'email')) return done(null, false, { message: 'Email already exists!' })
+        if (error.message.includesAll('duplicate key', 'email')) return done(null, false, 'Email already exists!')
 
-        return done(error, null, { message: error.message })
+        return done(error, null, error.message)
       }
     }
   )
@@ -54,7 +55,7 @@ passport.use(
         return done(null, user)
       } catch (error) {
         if (error.statusCode) return done(null, false)
-        return done(error)
+        return done(new AuthError(error))
       }
     }
   )

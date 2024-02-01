@@ -30,7 +30,11 @@ const productsSchema = Schema({
     type: String,
     required: true
   },
-  thumbnails: [String]
+  thumbnails: [String],
+  owner: {
+    type: String,
+    default: 'admin'
+  }
 })
 
 productsSchema.plugin(mongoosePaginate)

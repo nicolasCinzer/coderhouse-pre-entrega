@@ -5,7 +5,7 @@ export const checkCart = (req, res, next) => {
   const { cart } = req.user
 
   if (!cart.equals(cid)) {
-    throw new ValidationError('This is not your Cart')
+    return next(new ValidationError('This is not your Cart'))
   }
 
   next()

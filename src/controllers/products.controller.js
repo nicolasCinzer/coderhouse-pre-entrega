@@ -1,26 +1,31 @@
 import { productsService } from '../services/products.service.js'
-import { success } from '../utils/index.js'
-import { logger } from '../config/logger.js'
+import { createHash, success } from '../utils/index.js'
 
 export const getProducts = async (req, res, next) => {
-  logger.info('Products fetched!')
-  const { limit, page, sort, query } = req.query
+  let { limit, page, sort, paginated, ...query } = req.query
+  paginated = Boolean(parseInt(paginated))
 
   try {
-    const products = await productsService.getProducts({ limit, page, sort, query }, true)
+    const products = await productsService.getProducts({ limit, page, sort, query }, paginated)
 
-    const restOfProperties = {
-      totalPages: products.totalPages,
-      prevPage: products.prevPage,
-      nextPage: products.nextPage,
-      page: products.page,
-      hasPrevPage: products.hasPrevPage,
-      hasNextPage: products.hasNextPage,
-      prevLink: products.hasPrevPage ? `http://localhost:8080/api/products?page=${products.prevPage}` : null,
-      nextLink: products.hasNextPage ? `http://localhost:8080/api/products?page=${products.nextPage}` : null
-    }
+    const restOfProperties = paginated
+      ? {
+          totalPages: products.totalPages,
+          prevPage: products.prevPage,
+          nextPage: products.nextPage,
+          page: products.page,
+          hasPrevPage: products.hasPrevPage,
+          hasNextPage: products.hasNextPage,
+          prevLink: products.hasPrevPage ? `http://localhost:8080/api/products?page=${products.prevPage}` : null,
+          nextLink: products.hasNextPage ? `http://localhost:8080/api/products?page=${products.nextPage}` : null
+        }
+      : {}
 
-    success({ res, message: `${products.docs.length} Products founded!`, features: products.docs, restOfProperties })
+    const message = `${paginated ? products.docs.length : products.length} Products founded!`
+
+    const features = paginated ? products.docs : products
+
+    success({ res, message, features, restOfProperties })
   } catch (err) {
     next(err)
   }
@@ -40,9 +45,20 @@ export const getProductByID = async (req, res, next) => {
 
 export const createProduct = async (req, res, next) => {
   const { title, description, code, price, status, stock, category, thumbnails } = req.body
+  const { email, role } = req.user
 
   try {
-    const newProduct = await productsService.addProduct({ title, description, code, price, status, stock, category, thumbnails })
+    const newProduct = await productsService.addProduct({
+      owner: role === 'admin' ? role : email,
+      title,
+      description,
+      code: code ?? createHash(),
+      price,
+      status,
+      stock,
+      category,
+      thumbnails
+    })
 
     success({ res, message: 'Product added successfully!', features: newProduct })
   } catch (err) {

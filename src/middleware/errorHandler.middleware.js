@@ -1,6 +1,6 @@
 import { logger } from '../config/logger.js'
 
-const errorHandler = (err, req, res, next) => {
+export const errorHandler = (err, req, res, next) => {
   const { statusCode, message } = err
 
   if (statusCode) {

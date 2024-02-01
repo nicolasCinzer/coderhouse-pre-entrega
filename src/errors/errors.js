@@ -29,6 +29,18 @@ class ValidationError extends BaseError {
   }
 }
 
+class NotAllowedError extends BaseError {
+  constructor(message = 'You are not allowed to perform this action.') {
+    super(403, message)
+  }
+}
+
+class BadRequest extends BaseError {
+  constructor(message = 'Something is bad with the request.') {
+    super(400, message)
+  }
+}
+
 class ConflictError extends BaseError {
   constructor(message = 'Conflict detected.') {
     super(409, message)
@@ -41,4 +53,4 @@ class AuthError extends BaseError {
   }
 }
 
-export { NotFoundError, NotAvailableError, ValidationError, ConflictError, OutOfStockError, AuthError }
+export { NotFoundError, NotAvailableError, NotAllowedError, BadRequest, ValidationError, ConflictError, OutOfStockError, AuthError }

@@ -26,7 +26,8 @@ const usersSchema = new Schema({
   },
   role: {
     type: String,
-    default: 'user'
+    default: 'user',
+    enum: ['user', 'premium', 'admin']
   },
   isGithub: {
     type: Boolean,

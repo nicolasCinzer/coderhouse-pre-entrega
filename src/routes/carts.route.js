@@ -9,8 +9,9 @@ import {
   deleteProductFromCart,
   purchase
 } from '../controllers/carts.controller.js'
-import { checkCart } from '../middleware/checkCart.middleware.js'
+import { checkCart } from '../middleware/index.js'
 import passport from '../config/passport.js'
+import { checkProduct } from '../middleware/checkProduct.cart.middleware.js'
 
 export const router = Router()
 
@@ -22,7 +23,7 @@ router.post('/carts/:cid', passport.authenticate('current', { session: false }),
 
 router.delete('/carts/:cid', passport.authenticate('current', { session: false }), checkCart, deleteAllProductsFromCart)
 
-router.post('/carts/:cid/product/:pid', passport.authenticate('current', { session: false }), checkCart, addProductToCart)
+router.post('/carts/:cid/product/:pid', passport.authenticate('current', { session: false }), checkCart, checkProduct, addProductToCart)
 
 router.put('/carts/:cid/product/:pid', passport.authenticate('current', { session: false }), checkCart, updateProductQty)
 

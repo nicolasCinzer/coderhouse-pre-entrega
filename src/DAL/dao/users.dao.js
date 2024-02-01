@@ -1,4 +1,4 @@
-import { ValidationError } from '../../errors/errors.js'
+import { BadRequest, ValidationError } from '../../errors/errors.js'
 import { usersModel } from '../models/users.model.js'
 
 export const findById = async id => {
@@ -43,9 +43,22 @@ export const updatePassword = async ({ user, password: newPassword }) => {
   }
 }
 
+export const switchRole = async user => {
+  if (user.role === 'user') user.role = 'premium'
+  else if (user.role === 'premium') user.role = 'user'
+  else if (user.role === 'admin') throw new BadRequest('Cant change role to Admin!')
+
+  try {
+    return user.save()
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export default {
   findById,
   findByEmail,
   create,
-  updatePassword
+  updatePassword,
+  switchRole
 }

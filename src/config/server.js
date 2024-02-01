@@ -7,7 +7,7 @@ import 'dotenv/config.js'
 
 // Internal Dependencies
 import Routes from '../routes/router.js'
-import errorHandler from '../middleware/errorHandler.middleware.js'
+import { errorHandler } from '../middleware/index.js'
 import messagesService from '../services/messages.service.js'
 import passport from './passport.js'
 import { PORT, coockieSecretKey } from './config.js'

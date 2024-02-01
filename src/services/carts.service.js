@@ -1,7 +1,6 @@
 import { getCartById, createCart, addProductToCart, updateQuantity, deleteAllProducts, deleteCartItem } from '../DAL/dao/carts.dao.js'
 import { generateTicket } from '../DAL/dao/tickets.dao.js'
-import { createHash } from '../utils/createRandomHash.js'
-import { sendTicketMail } from '../utils/transporterNodemailer.js'
+import { createHash, sendTicketMail } from '../utils/index.js'
 import { productsService } from './products.service.js'
 
 class CartsService {

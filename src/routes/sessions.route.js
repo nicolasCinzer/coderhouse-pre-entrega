@@ -11,7 +11,7 @@ router.post('/sessions/signup', (req, res, next) => {
     {
       successRedirect: '/login'
     },
-    (err, user, { message }) => {
+    (err, user, message) => {
       if (err) return next(err)
 
       if (!user) return next(new ValidationError(message))

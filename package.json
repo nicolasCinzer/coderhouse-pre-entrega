@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js",
     "truncate-carts": "node ./src/scripts/truncateDBs.js --db carts",
     "truncate-products": "node ./src/scripts/truncateDBs.js --db products"
   },
