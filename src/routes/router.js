@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { router as cartsRouter } from './carts.route.js'
 import { router as productsRouter } from './products.route.js'
 import { router as viewsRouter } from './views.route.js'
-import { router as sessionsRouter } from './sessions.route.js'
+import { router as sessionsRouter } from './auth.route.js'
 import { router as usersRouter } from './users.router.js'
 import { router as testRouter } from './tests.route.js'
 

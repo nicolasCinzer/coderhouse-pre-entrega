@@ -1,4 +1,5 @@
 import { usersService } from '../services/users.service.js'
+import { success } from '../utils/successResponse.js'
 
 const paths = {
   login: '/login',
@@ -27,13 +28,26 @@ export const current = async (req, res) => {
   res.json({ user: req.user })
 }
 
-export const resetPassword = async (req, res, next) => {
-  const { email, password } = req.body
+export const sendResetEmail = async (req, res, next) => {
+  const { email } = req.body
 
   try {
-    await usersService.updatePassword({ email, password })
+    const { url, token } = await usersService.sendResetPasswordMail(email)
 
-    res.redirect(paths.login)
+    success({ res, message: `Reset password email sended to ${email}!`, features: { url, token } })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const resetPassword = async (req, res, next) => {
+  const { password } = req.body
+  const email = req.payload
+
+  try {
+    const updatedUser = await usersService.updatePassword({ email, password })
+
+    success({ res, message: `Reset password successfully for ${email}!`, features: updatedUser })
   } catch (err) {
     if (err.status === 401) return res.redirect('/signup')
 
