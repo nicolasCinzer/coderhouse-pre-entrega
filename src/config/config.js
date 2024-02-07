@@ -13,6 +13,7 @@ export const PORT = process.env.PORT
 export const nodemailerEmail = process.env.NODEMAILER_EMAIL
 export const nodemailerPw = process.env.NODEMAILER_PASSWORD
 export const env = process.env.ENVIROMENT
+export const server_url = process.env.SERVER_URL
 
 export default {
   databaseURI,
@@ -29,5 +30,6 @@ export default {
   PORT,
   nodemailerEmail,
   nodemailerPw,
-  env
+  env,
+  server_url
 }
