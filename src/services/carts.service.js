@@ -1,10 +1,12 @@
 import { getCartById, createCart, addProductToCart, updateQuantity, deleteAllProducts, deleteCartItem } from '../DAL/dao/carts.dao.js'
 import { generateTicket } from '../DAL/dao/tickets.dao.js'
-import { createHash, sendTicketMail } from '../utils/index.js'
+import { createHash, sendTicketMail, checkValidOID } from '../utils/index.js'
 import { productsService } from './products.service.js'
 
 class CartsService {
   async getCartById(id) {
+    checkValidOID(id)
+
     try {
       return getCartById(id, true)
     } catch (err) {
@@ -21,6 +23,8 @@ class CartsService {
   }
 
   async addProductToCart({ cid, pid }) {
+    checkValidOID(cid, pid)
+
     try {
       const cart = await getCartById(cid)
 
@@ -31,6 +35,8 @@ class CartsService {
   }
 
   async addMultipleProducts({ cid, products }) {
+    checkValidOID(cid)
+
     try {
       const cart = await getCartById(cid)
 
@@ -47,6 +53,8 @@ class CartsService {
   }
 
   async updateQuantity({ cid, pid, quantity }) {
+    checkValidOID(cid, pid)
+
     try {
       const cart = await getCartById(cid)
 
@@ -57,6 +65,8 @@ class CartsService {
   }
 
   async deleteAllProducts(id) {
+    checkValidOID(id)
+
     try {
       const cart = await getCartById(id)
 
@@ -67,6 +77,8 @@ class CartsService {
   }
 
   async deleteCartItem({ cid, pid }) {
+    checkValidOID(cid, pid)
+
     try {
       const cart = await getCartById(cid)
 
@@ -76,8 +88,9 @@ class CartsService {
     }
   }
 
-  //PROBAR!
   async purchaseItems({ cid, email }) {
+    checkValidOID(cid)
+
     try {
       const cart = await getCartById(cid, true)
 

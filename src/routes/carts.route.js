@@ -9,9 +9,8 @@ import {
   deleteProductFromCart,
   purchase
 } from '../controllers/carts.controller.js'
-import { checkCart } from '../middleware/index.js'
+import { checkCart, checkProduct } from '../middleware/index.js'
 import passport from '../config/passport.js'
-import { checkProduct } from '../middleware/checkProduct.cart.middleware.js'
 
 export const router = Router()
 

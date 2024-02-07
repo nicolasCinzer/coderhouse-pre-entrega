@@ -1,5 +1,6 @@
 import { getProducts, getPaginatedProducts, getProductById, addProduct, updateProduct, deleteProduct } from '../DAL/dao/products.dao.js'
 import { MockingProducts } from '../mocks/products.mock.js'
+import { checkValidOID } from '../utils/index.js'
 
 class ProductsService {
   async getProducts({ limit = 10, page = 1, sort = 'def', query = {} } = {}, paginated = false) {
@@ -27,6 +28,8 @@ class ProductsService {
   }
 
   async getProductById(id) {
+    checkValidOID(id)
+
     try {
       return getProductById(id)
     } catch (err) {
@@ -43,6 +46,8 @@ class ProductsService {
   }
 
   async updateProduct({ id, product }) {
+    checkValidOID(id)
+
     try {
       return updateProduct({ id, product })
     } catch (err) {
@@ -51,6 +56,8 @@ class ProductsService {
   }
 
   async deleteProduct(id) {
+    checkValidOID(id)
+
     try {
       return deleteProduct(id)
     } catch (err) {
