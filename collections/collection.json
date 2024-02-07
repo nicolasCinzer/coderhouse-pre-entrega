@@ -1,0 +1,330 @@
+{
+  "v": 2,
+  "name": "Coderhouse",
+  "folders": [
+    {
+      "v": 2,
+      "name": "Product",
+      "folders": [],
+      "requests": [
+        {
+          "name": "Products",
+          "headers": [],
+          "v": "1",
+          "auth": { "authType": "none", "authActive": true },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": { "contentType": null, "body": null },
+          "method": "GET",
+          "endpoint": "<<URL>>/products",
+          "params": [
+            { "key": "owner", "value": "nicolas.cinzer1@gmail.com", "active": true },
+            { "key": "paginated", "value": "0", "active": true }
+          ]
+        },
+        {
+          "preRequestScript": "",
+          "method": "GET",
+          "endpoint": "<<URL>>/products/653f0b45332303471d363f4a",
+          "body": { "body": null, "contentType": null },
+          "testScript": "",
+          "name": "Products By ID",
+          "params": [],
+          "auth": { "authType": "none", "authActive": true },
+          "v": "1",
+          "headers": []
+        },
+        {
+          "preRequestScript": "",
+          "auth": { "authType": "none", "authActive": true },
+          "v": "1",
+          "name": "Create Product",
+          "endpoint": "<<URL>>/products",
+          "method": "POST",
+          "params": [],
+          "testScript": "",
+          "headers": [],
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"title\": \"Foo Bar\",\n  \"description\": \"Description\",\n  \"price\": 40000,\n  \"status\": true,\n  \"stock\": 100,\n  \"category\": \"Catergory\",\n  \"thumbnails\": [\"./images/foo/bar\"]\n}"
+          }
+        },
+        {
+          "method": "PUT",
+          "name": "Update Product",
+          "v": "1",
+          "headers": [],
+          "auth": { "authActive": true, "authType": "none" },
+          "body": { "contentType": "application/json", "body": "{\n  \"stock\": 10\n}" },
+          "preRequestScript": "",
+          "params": [],
+          "testScript": "",
+          "endpoint": "<<URL>>/products/653f0b45332303471d363f4b"
+        },
+        {
+          "testScript": "",
+          "params": [],
+          "endpoint": "<<URL>>/products/65bae44819aa675237c7d5ce",
+          "headers": [],
+          "v": "1",
+          "body": { "contentType": "application/json", "body": "{\n  \"title\": \"Foo Bar 123\"\n}" },
+          "name": "Delete Product",
+          "method": "DELETE",
+          "preRequestScript": "",
+          "auth": { "authType": "none", "authActive": true }
+        },
+        {
+          "auth": { "authType": "none", "authActive": true },
+          "params": [],
+          "headers": [{ "key": "Content-Type", "active": true, "value": "" }],
+          "endpoint": "<<URL>>/mockingproducts",
+          "body": {
+            "contentType": null,
+            "body": "{\n  \"title\": \"Foo Bar\",\n  \"description\": \"Description\",\n  \"code\": \"SKU-006\",\n  \"price\": 40000,\n  \"status\": true,\n  \"stock\": 100,\n  \"category\": \"Catergory\",\n  \"thumbnails\": [\"./images/foo/bar\"]\n}"
+          },
+          "testScript": "",
+          "v": "1",
+          "method": "GET",
+          "preRequestScript": "",
+          "name": "Mocking Products"
+        }
+      ],
+      "auth": { "authType": "inherit", "authActive": true },
+      "headers": []
+    },
+    {
+      "v": 2,
+      "name": "Cart",
+      "folders": [],
+      "requests": [
+        {
+          "v": "1",
+          "body": { "body": "{}", "contentType": "application/json" },
+          "endpoint": "<<URL>>/carts/659038dc9631a7349940d903",
+          "name": "Cart By ID",
+          "testScript": "",
+          "params": [],
+          "method": "GET",
+          "auth": { "authType": "none", "authActive": true },
+          "headers": [{ "key": "Content-Type", "value": "", "active": true }],
+          "preRequestScript": ""
+        },
+        {
+          "headers": [],
+          "auth": { "authActive": true, "authType": "none" },
+          "body": { "contentType": "application/json", "body": "{\n  \"title\": \"Foo Bar 123\"\n}" },
+          "endpoint": "<<URL>>/carts",
+          "v": "1",
+          "method": "POST",
+          "testScript": "",
+          "name": "Create Cart",
+          "params": [],
+          "preRequestScript": ""
+        },
+        {
+          "method": "POST",
+          "body": { "body": "{\n  \"title\": \"Foo Bar 123\"\n}", "contentType": null },
+          "params": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "name": "Add Product to Cart",
+          "endpoint": "<<URL>>/carts/65bae08c3d918f6e9da0595f/product/65baf207923f851ce5dff497",
+          "v": "1",
+          "auth": { "authActive": true, "authType": "none" },
+          "headers": []
+        },
+        {
+          "headers": [],
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"products\": [\"653f0b45332303471d363f4a\", \"653f0b45332303471d363f4b\", \"653f0b45332303471d363f47\"]\n}"
+          },
+          "method": "POST",
+          "endpoint": "<<URL>>/carts/659038dc9631a7349940d903",
+          "testScript": "",
+          "name": "Add Multiple Products ",
+          "auth": { "authType": "none", "authActive": true },
+          "v": "1",
+          "preRequestScript": "",
+          "params": []
+        },
+        {
+          "endpoint": "<<URL>>/carts/659038dc9631a7349940d903/product/653f0b45332303471d363f4a",
+          "name": "Update Product Quantity",
+          "params": [],
+          "headers": [],
+          "testScript": "",
+          "body": { "contentType": "application/json", "body": "{\n  \"quantity\": 2\n}\n" },
+          "auth": { "authType": "none", "authActive": true },
+          "method": "PUT",
+          "preRequestScript": "",
+          "v": "1"
+        },
+        {
+          "method": "DELETE",
+          "params": [],
+          "auth": { "authType": "none", "authActive": true },
+          "v": "1",
+          "body": { "contentType": "application/json", "body": "{\n  \"title\": \"Foo Bar 123\"\n}" },
+          "headers": [],
+          "preRequestScript": "",
+          "name": "Delete Product from Cart",
+          "endpoint": "<<URL>>/carts/659038dc9631a7349940d903/product/653f0b45332303471d363f4a",
+          "testScript": ""
+        },
+        {
+          "headers": [],
+          "endpoint": "<<URL>>/carts/659038dc9631a7349940d903",
+          "v": "1",
+          "body": { "body": "=", "contentType": "application/json" },
+          "testScript": "",
+          "method": "DELETE",
+          "params": [],
+          "name": "Delete All Products from Cart",
+          "auth": { "authType": "none", "authActive": true },
+          "preRequestScript": ""
+        },
+        {
+          "endpoint": "<<URL>>/carts/659038dc9631a7349940d903/purchase",
+          "method": "POST",
+          "auth": { "authType": "none", "authActive": true },
+          "preRequestScript": "",
+          "v": "1",
+          "testScript": "",
+          "headers": [],
+          "name": "Purchase ",
+          "body": { "body": "=", "contentType": null },
+          "params": []
+        }
+      ],
+      "auth": { "authType": "inherit", "authActive": true },
+      "headers": []
+    },
+    {
+      "v": 2,
+      "name": "Users",
+      "folders": [],
+      "requests": [
+        {
+          "v": "1",
+          "endpoint": "<<URL>>/users/premium/65bae0e63d918f6e9da05961",
+          "name": "Switch Role",
+          "params": [],
+          "headers": [],
+          "method": "GET",
+          "auth": { "authType": "none", "authActive": true },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": { "contentType": null, "body": null }
+        }
+      ],
+      "auth": { "authType": "inherit", "authActive": true },
+      "headers": []
+    },
+    {
+      "v": 2,
+      "name": "Auth",
+      "folders": [],
+      "requests": [
+        {
+          "preRequestScript": "",
+          "headers": [],
+          "auth": { "authActive": true, "authType": "none" },
+          "body": {
+            "body": "{\n  \"first_name\": \"Nicolas\",\n  \"last_name\": \"Cinzer\",\n  \"email\": \"nicolas.cinzer001@gmail.com\",\n  \"age\": 22,\n  \"password\": \"sintabu420\"\n}",
+            "contentType": "application/json"
+          },
+          "testScript": "",
+          "method": "POST",
+          "v": "1",
+          "name": "Signup",
+          "params": [],
+          "endpoint": "<<URL>>/auth/signup"
+        },
+        {
+          "v": "1",
+          "method": "POST",
+          "preRequestScript": "",
+          "endpoint": "<<URL>>/auth/login",
+          "params": [],
+          "headers": [],
+          "body": { "body": "{\n  \"email\": \"nicolas.cinzer1@gmail.com\",\n  \"password\": \"sintabu420\"\n}", "contentType": "application/json" },
+          "testScript": "",
+          "auth": { "authActive": true, "authType": "none" },
+          "name": "Login"
+        },
+        {
+          "params": [],
+          "body": {
+            "body": "{\n  \"email\": \"nicolas.cinzer2000@gmail.com\",\n  \"password\": \"Upperwestcinzer123\"\n}",
+            "contentType": "application/json"
+          },
+          "headers": [],
+          "name": "Current",
+          "auth": { "authActive": true, "authType": "none" },
+          "v": "1",
+          "method": "GET",
+          "preRequestScript": "",
+          "endpoint": "<<URL>>/auth/current",
+          "testScript": ""
+        },
+        {
+          "v": "1",
+          "endpoint": "<<URL>>/auth/sendReset",
+          "name": "Send Reset Password URL",
+          "params": [],
+          "headers": [],
+          "method": "POST",
+          "auth": { "authType": "none", "authActive": true },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": { "contentType": "application/json", "body": "{\n  \"email\": \"nicolas.cinzer00@gmail.com\"\n}" }
+        },
+        {
+          "v": "1",
+          "endpoint": "<<URL>>/auth/reset",
+          "name": "Reset Password",
+          "params": [],
+          "headers": [
+            {
+              "active": true,
+              "key": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5pY29sYXMuY2luemVyMDBAZ21haWwuY29tIiwiaWF0IjoxNzA3MjY0NTI2fQ.igUj1InFCu3sgnaa-qtqogKoVAEIB3jTQbHim3gdTfc"
+            }
+          ],
+          "method": "POST",
+          "auth": { "authType": "none", "authActive": true },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": { "contentType": "application/json", "body": "{\n  \"password\": \"sintabu4200\"\n}" }
+        }
+      ],
+      "auth": { "authType": "inherit", "authActive": true },
+      "headers": []
+    },
+    {
+      "v": 2,
+      "name": "Tests",
+      "folders": [],
+      "requests": [
+        {
+          "auth": { "authActive": true, "authType": "none" },
+          "endpoint": "<<URL>>/products",
+          "params": [],
+          "headers": [],
+          "name": "Loggers",
+          "preRequestScript": "",
+          "body": { "contentType": null, "body": null },
+          "testScript": "",
+          "method": "GET",
+          "v": "1"
+        }
+      ],
+      "auth": { "authType": "inherit", "authActive": true },
+      "headers": []
+    }
+  ],
+  "requests": [],
+  "auth": { "authType": "inherit", "authActive": true },
+  "headers": []
+}
