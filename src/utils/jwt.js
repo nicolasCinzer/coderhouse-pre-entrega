@@ -4,3 +4,7 @@ import { jwtSecretKey } from '../config/config.js'
 export const generateToken = payload => {
   return jwt.sign(payload, jwtSecretKey)
 }
+
+export const readToken = token => {
+  return jwt.verify(token, jwtSecretKey)
+}

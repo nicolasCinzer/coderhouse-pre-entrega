@@ -1,11 +1,15 @@
-import { findByEmail, findById, create, updatePassword, switchRole } from '../DAL/dao/users.dao.js'
+import { findByEmail, findById, create, updatePassword, switchRole, find } from '../DAL/dao/users.dao.js'
 import { UsersDTO } from '../DAL/dto/users.dto.js'
 import { ValidationError, AuthError, NotFoundError } from '../errors/errors.js'
-import { hashData, compareData, generateToken } from '../utils/index.js'
+import { hashData, compareData, generateToken, buildURL, resetPasswordEmail } from '../utils/index.js'
 
 class UsersService {
   async findById(id) {
     return findById(id)
+  }
+
+  async find(query) {
+    return find(query)
   }
 
   async findByEmail(email) {
@@ -81,6 +85,22 @@ class UsersService {
     }
 
     return generateToken(payload)
+  }
+
+  async sendResetPasswordMail(email) {
+    const user = await findByEmail(email)
+
+    const token = generateToken({ email })
+
+    user.tempToken = token
+
+    await user.save
+
+    const url = buildURL(`/auth/reset?token=${token}`)
+
+    await resetPasswordEmail({ to: email, url })
+
+    return { url, token }
   }
 }
 

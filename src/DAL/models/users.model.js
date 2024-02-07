@@ -32,6 +32,9 @@ const usersSchema = new Schema({
   isGithub: {
     type: Boolean,
     default: false
+  },
+  tempToken: {
+    type: String
   }
 })
 

@@ -1,7 +1,7 @@
 import { nodemailerEmail, nodemailerPw } from '../config/config.js'
 import { createTransport } from 'nodemailer'
 
-export const transporter = createTransport({
+const transporter = createTransport({
   service: 'gmail',
   auth: {
     user: nodemailerEmail,
@@ -21,6 +21,25 @@ export const sendTicketMail = async ({ to, ticketCode, totalItems, totalCost, at
       <p>Gracias por su compra</p>
     `,
     attachments
+  }
+
+  const email = await transporter.sendMail(mailOptions)
+
+  return email
+}
+
+export const resetPasswordEmail = async ({ to, url }) => {
+  const mailOptions = {
+    from: 'pichichi@ecommerce.com.ar',
+    to,
+    subject: `Recuperacion de Contraseña`,
+    html: `
+      <h2>Recuperacion de Contraseña</h2>
+      <p>Se ha solicitado una recuperacion de contraseña desde este email.</p>
+      <p><strong>Tiene 1 hora para realizar esta accion. En caso de no realizarlo, solicite otra recuperacion.</strong></p>
+      <p>Para completar la solicitud, entre en el siguiente link:</p>
+      <p>${url}</p>
+    `
   }
 
   const email = await transporter.sendMail(mailOptions)
