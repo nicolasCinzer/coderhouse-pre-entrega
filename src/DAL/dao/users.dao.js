@@ -2,45 +2,35 @@ import { BadRequest, ValidationError } from '../../errors/errors.js'
 import { usersModel } from '../models/users.model.js'
 
 export const findById = async id => {
-  try {
-    const user = await usersModel.findById(id)
+  const user = await usersModel.findById(id)
 
-    if (!user) throw new ValidationError('User not Found')
+  if (!user) throw new ValidationError('User not Found')
 
-    return user
-  } catch (error) {
-    throw new Error(error)
-  }
+  return user
 }
 
 export const findByEmail = async email => {
-  try {
-    const user = await usersModel.findOne({ email })
+  const user = await usersModel.findOne({ email })
 
-    if (!user) throw new ValidationError('User not Found')
+  if (!user) throw new ValidationError('User not Found')
 
-    return user
-  } catch (error) {
-    throw new Error(error)
-  }
+  return user
 }
 
-export const create = async user => {
-  try {
-    return usersModel.create(user)
-  } catch (error) {
-    throw new Error(error)
-  }
+export const find = async query => {
+  const user = await usersModel.findOne(query)
+
+  if (!user) throw new ValidationError('User not Found')
+
+  return user
 }
+
+export const create = async user => usersModel.create(user)
 
 export const updatePassword = async ({ user, password: newPassword }) => {
-  try {
-    user.password = newPassword
+  user.password = newPassword
 
-    return user.save()
-  } catch (error) {
-    throw new Error(error)
-  }
+  return user.save()
 }
 
 export const switchRole = async user => {
@@ -48,17 +38,5 @@ export const switchRole = async user => {
   else if (user.role === 'premium') user.role = 'user'
   else if (user.role === 'admin') throw new BadRequest('Cant change role to Admin!')
 
-  try {
-    return user.save()
-  } catch (error) {
-    throw new Error(error)
-  }
-}
-
-export default {
-  findById,
-  findByEmail,
-  create,
-  updatePassword,
-  switchRole
+  return user.save()
 }
