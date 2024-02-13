@@ -1,0 +1,85 @@
+paths:
+  /api/products:
+    get:
+      summary: Get products by query
+      tags:
+        - Products
+      parameters:
+        - in: query
+          name: limit
+          schemas:
+            type: number
+          description: Amount of features returned
+        - in: query
+          name: page
+          schemas:
+            type: number
+          description: Page returned
+        - in: query
+          name: sort
+          schemas:
+            type: string
+            enum: [asc, desc, def]
+            default: def
+          description: Sorting of features returned
+      responses:
+        '200':
+          description: Products by query
+          content:
+            application/json:
+              schemas:
+                $ref: '#components/schemas/Product'
+              example:
+                message: 1 Products founded!
+                payload:
+                  - id: 2832741841h1o3h21
+                    title: Mac Book 13
+                    description: Notebook from Apple Store Model 13
+                    code: SKU-001
+                    price: 5000
+                    status: true
+                    stock: 100
+                    category: Technology
+                    thumbnails: ['www.foobar.com/macbook.img']
+                    owner: 1082937jkh13k13k2
+        '500':
+          description: Server Error
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: number
+        category:
+          type: string
+        thumbnails:
+          type: array
+          items:
+            type: string
+        owner:
+          type: string
+      example:
+        id: 2832741841h1o3h21
+        title: Mac Book 13
+        description: Notebook from Apple Store Model 13
+        code: SKU-001
+        price: 5000
+        status: true
+        stock: 100
+        category: Technology
+        thumbnails: ['www.foobar.com/macbook.img']
+        owner: 1082937jkh13k13k2
