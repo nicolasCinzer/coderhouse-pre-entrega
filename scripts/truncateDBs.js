@@ -2,10 +2,6 @@ import { cartsModel } from '../dao/models/carts.model.js'
 import { productsModel } from '../dao/models/products.model.js'
 import '../dao/configDB.js'
 
-const populateFields = async () => {
-  
-}
-
 const args = process.argv.reduce((prev, curr, i, args) => {
   if (curr.includes('--')) {
     const property = curr.split('--')[1]
