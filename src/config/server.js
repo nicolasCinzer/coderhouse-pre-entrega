@@ -3,7 +3,6 @@ import express from 'express'
 import { engine } from 'express-handlebars'
 import { Server } from 'socket.io'
 import cookieParser from 'cookie-parser'
-import 'dotenv/config.js'
 
 // Internal Dependencies
 import Routes from '../routes/router.js'

@@ -1,3 +1,5 @@
+import 'dotenv/config.js'
+
 export const databaseURI = process.env.DB_URL
 export const adminPw = process.env.ADMIN_PASSWORD
 export const adminEmail = process.env.ADMIN_EMAIL
