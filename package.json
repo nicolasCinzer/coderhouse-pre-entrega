@@ -9,7 +9,7 @@
     "dev": "nodemon ./src/app.js",
     "truncate-carts": "node ./src/scripts/truncateDBs.js --db carts",
     "truncate-products": "node ./src/scripts/truncateDBs.js --db products",
-    "test-products": "mocha -t 10000 ./src/tests/products.test.js"
+    "test-products": "mocha -t 10000 ./src/tests/index.test.js"
   },
   "keywords": [],
   "author": "",
