@@ -21,7 +21,7 @@ export const login = async (req, res) => {
 
   const token = await usersService.login({ email, first_name })
 
-  res.cookie('token', token, { maxAge: 600000, httpOnly: true }).redirect('/home')
+  res.cookie('token', token, { httpOnly: true }).redirect('/home')
 }
 
 export const current = async (req, res) => {

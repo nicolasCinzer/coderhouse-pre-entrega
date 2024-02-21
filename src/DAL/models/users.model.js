@@ -14,12 +14,8 @@ const usersSchema = new Schema({
     required: true,
     unique: true
   },
-  age: {
-    type: Number
-  },
-  password: {
-    type: String
-  },
+  age: Number,
+  password: String,
   cart: {
     type: Types.ObjectId,
     ref: 'Carts'
@@ -33,9 +29,18 @@ const usersSchema = new Schema({
     type: Boolean,
     default: false
   },
-  tempToken: {
-    type: String
-  }
+  tempToken: String,
+  documents: {
+    type: [
+      {
+        name: String,
+        ref: String,
+        _id: false
+      }
+    ],
+    default: []
+  },
+  last_connection: Date
 })
 
 export const usersModel = model('Users', usersSchema)
