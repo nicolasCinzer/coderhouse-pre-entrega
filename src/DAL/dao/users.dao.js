@@ -40,3 +40,9 @@ export const switchRole = async user => {
 
   return user.save()
 }
+
+export const registrateLastConnection = async ({ user, updatedLastConnection }) => {
+  user.last_connection = updatedLastConnection
+
+  await user.save()
+}

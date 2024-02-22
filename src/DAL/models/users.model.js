@@ -29,7 +29,7 @@ const usersSchema = new Schema({
     type: Boolean,
     default: false
   },
-  tempToken: String,
+  temp_token: String,
   documents: {
     type: [
       {
@@ -40,7 +40,19 @@ const usersSchema = new Schema({
     ],
     default: []
   },
-  last_connection: Date
+  last_connection: {
+    type: {
+      timestamp: {
+        type: Date,
+        default: Date.now()
+      },
+      status: {
+        type: String,
+        enum: ['logged in', 'logged out']
+      },
+      session_duration: Number
+    }
+  }
 })
 
 export const usersModel = model('Users', usersSchema)

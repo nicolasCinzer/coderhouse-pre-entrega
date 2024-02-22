@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import passport from '../config/passport.js'
-import { signout, resetPassword, login, current, sendResetEmail } from '../controllers/auth.controller.js'
+import { logout, resetPassword, login, current, sendResetEmail } from '../controllers/auth.controller.js'
 import { ValidationError } from '../errors/errors.js'
 import { checkToken } from '../middleware/index.js'
 import { success } from '../utils/successResponse.js'
@@ -34,7 +34,7 @@ router.post(
 
 router.get('/auth/current', passport.authenticate('current', { session: false }), current)
 
-router.post('/auth/signout', signout)
+router.post('/auth/logout', passport.authenticate('current', { session: false }), logout)
 
 router.get('/auth/auth/github', passport.authenticate('github', { scope: ['user:email'] }))
 
@@ -48,4 +48,4 @@ router.get(
 
 router.post('/auth/sendReset', sendResetEmail)
 
-router.post('/auth/reset', checkToken, resetPassword) 
+router.post('/auth/reset', checkToken, resetPassword)

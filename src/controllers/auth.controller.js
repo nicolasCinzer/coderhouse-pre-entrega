@@ -6,22 +6,26 @@ const paths = {
   home: '/home'
 }
 
-export const signout = async (req, res, next) => {
+export const logout = async (req, res, next) => {
+  const user = req.user
+
   try {
-    req.session.destroy(() => {
-      res.redirect(paths.login)
-    })
+    await usersService.logout(user)
+
+    res.clearCookie('token').send({ ok: true, message: 'Logged out successfully' })
   } catch (error) {
     next(error)
   }
 }
 
-export const login = async (req, res) => {
-  const { email, first_name } = req.user
+export const login = async (req, res, next) => {
+  try {
+    const token = await usersService.login({ user: req.user })
 
-  const token = await usersService.login({ email, first_name })
-
-  res.cookie('token', token, { httpOnly: true }).redirect('/home')
+    res.cookie('token', token, { httpOnly: true }).redirect('/home')
+  } catch (error) {
+    next(error)
+  }
 }
 
 export const current = async (req, res) => {

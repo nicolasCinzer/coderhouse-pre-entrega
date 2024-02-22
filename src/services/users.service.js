@@ -1,4 +1,4 @@
-import { findByEmail, findById, create, updatePassword, switchRole, find } from '../DAL/dao/users.dao.js'
+import { findByEmail, findById, create, updatePassword, switchRole, find, registrateLastConnection } from '../DAL/dao/users.dao.js'
 import { UsersDTO } from '../DAL/dto/users.dto.js'
 import { ValidationError, AuthError, NotFoundError } from '../errors/errors.js'
 import { hashData, compareData, generateToken, buildURL, resetPasswordEmail } from '../utils/index.js'
@@ -78,13 +78,42 @@ class UsersService {
     return UsersDTO.response(await switchRole(user))
   }
 
-  async login({ email, first_name }) {
+  async login({ user }) {
+    const { _id, email, first_name, last_connection } = user
+
+    if (!email || !first_name) throw new ValidationError('Some data is missing!')
+
     const payload = {
       email,
-      first_name
+      first_name,
+      _id: _id.toString()
     }
 
+    const updatedLastConnection = {
+      timestamp: Date.now(),
+      status: 'logged in',
+      session_duration: 0
+    }
+
+    await registrateLastConnection({ user, updatedLastConnection })
+
     return generateToken(payload)
+  }
+
+  async logout({ id }) {
+    const user = await findById(id)
+
+    const { last_connection } = user
+
+    const { timestamp } = last_connection
+
+    const updatedLastConnection = {
+      timestamp: Date.now(),
+      status: 'logged out',
+      session_duration: Date.now() - timestamp
+    }
+
+    return registrateLastConnection({ user, updatedLastConnection })
   }
 
   async sendResetPasswordMail(email) {
@@ -92,7 +121,7 @@ class UsersService {
 
     const token = generateToken({ email })
 
-    user.tempToken = token
+    user.temp_token = token
 
     await user.save
 
