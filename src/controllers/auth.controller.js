@@ -22,7 +22,7 @@ export const login = async (req, res, next) => {
   try {
     const token = await usersService.login({ user: req.user })
 
-    res.cookie('token', token, { httpOnly: true }).redirect('/home')
+    res.cookie('token', token, { httpOnly: true, maxAge: 60000 }).redirect('/home')
   } catch (error) {
     next(error)
   }

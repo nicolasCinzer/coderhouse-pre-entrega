@@ -74,6 +74,7 @@ export const renderSignup = (req, res) => {
 
 export const renderProfile = (req, res) => {
   const { user } = req.user
+  
   const view = 'profile'
 
   res.render(view, { user, baseClass: view })
@@ -89,4 +90,12 @@ export const renderError = (_, res) => {
   const view = 'error'
 
   res.render(view)
+}
+
+export const renderLoadDocuments = (req, res) => {
+  const { id } = req.user
+
+  const view = 'documents'
+
+  res.render(view, { id })
 }

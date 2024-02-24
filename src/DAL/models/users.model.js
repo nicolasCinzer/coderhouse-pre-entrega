@@ -40,6 +40,10 @@ const usersSchema = new Schema({
     ],
     default: []
   },
+  acceptable_premium: {
+    type: Boolean,
+    default: false
+  },
   last_connection: {
     type: {
       timestamp: {

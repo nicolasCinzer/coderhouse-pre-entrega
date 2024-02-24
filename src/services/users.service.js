@@ -1,7 +1,8 @@
-import { findByEmail, findById, create, updatePassword, switchRole, find, registrateLastConnection } from '../DAL/dao/users.dao.js'
+import { findByEmail, findById, create, updateUser, switchRole, find, registrateLastConnection } from '../DAL/dao/users.dao.js'
 import { UsersDTO } from '../DAL/dto/users.dto.js'
 import { ValidationError, AuthError, NotFoundError } from '../errors/errors.js'
 import { hashData, compareData, generateToken, buildURL, resetPasswordEmail } from '../utils/index.js'
+import { removeDuplicates } from '../utils/removeDuplicates.js'
 
 class UsersService {
   async findById(id) {
@@ -65,11 +66,11 @@ class UsersService {
       throw new ValidationError('Some data is missing!')
     }
 
-    const user = await findByEmail(email)
+    const { _id: id } = await findByEmail(email)
 
     const password = await hashData(newPassword)
 
-    return updatePassword({ password, user })
+    return updateUser({ updates: { password }, id })
   }
 
   async switchRole(id) {
@@ -130,6 +131,31 @@ class UsersService {
     await resetPasswordEmail({ to: email, url })
 
     return { url, token }
+  }
+
+  async updateDocuments({ files, id }) {
+    const newDocuments = Object.keys(files).reduce((docs, file) => {
+      const { fieldname: name, path: ref } = files[file][0]
+
+      const document = {
+        name,
+        ref
+      }
+
+      docs.push(document)
+
+      return docs
+    }, [])
+
+    const { documents: docs } = await findById(id)
+
+    const documents = removeDuplicates([...docs, ...newDocuments], 'name')
+
+    const updatedUser = await updateUser({ updates: { documents }, id })
+
+    updatedUser.acceptable_premium = updatedUser.documents.filter(doc => ['id', 'bank', 'address'].includes(doc.name)).length === 3
+
+    return updatedUser.save()
   }
 }
 

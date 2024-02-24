@@ -12,3 +12,16 @@ export const switchRole = async (req, res, next) => {
     next(error)
   }
 }
+
+export const saveDocuments = async (req, res, next) => {
+  const { files, params } = req
+  const { uid: id } = params
+
+  try {
+    const updatedUser = await usersService.updateDocuments({ files, id })
+
+    success({ res, message: 'User documents updated succesfully!', features: [updatedUser] })
+  } catch (error) {
+    next(error)
+  }
+}

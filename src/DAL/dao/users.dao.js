@@ -27,16 +27,12 @@ export const find = async query => {
 
 export const create = async user => usersModel.create(user)
 
-export const updatePassword = async ({ user, password: newPassword }) => {
-  user.password = newPassword
-
-  return user.save()
-}
+export const updateUser = async ({ updates, id }) => usersModel.findByIdAndUpdate(id, updates, { new: true })
 
 export const switchRole = async user => {
-  if (user.role === 'user') user.role = 'premium'
+  if (user.role === 'user' && user.acceptable_premium) user.role = 'premium'
   else if (user.role === 'premium') user.role = 'user'
-  else if (user.role === 'admin') throw new BadRequest('Cant change role to Admin!')
+  else if (user.role === 'admin') throw new BadRequest('Cant change the role of Admin!')
 
   return user.save()
 }
